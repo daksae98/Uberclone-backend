@@ -1,8 +1,7 @@
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
-import {
-  CreateAccountInput,
-  CreateAccountOutPut,
-} from './dtos/create-account.dto';
+import { MutationOutPut } from 'src/common/dtos/output.dto';
+import { CreateAccountInput } from './dtos/create-account.dto';
+import { LoginInput, LoginOutput } from './dtos/login.dto';
 import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
 
@@ -15,6 +14,31 @@ export class UsersResolver {
     return true;
   }
 
-  @Mutation(() => CreateAccountOutPut)
-  createAccount(@Args('input') createAccountInput: CreateAccountInput) {}
+  @Mutation(() => MutationOutPut)
+  async createAccount(
+    @Args('input') createAccountInput: CreateAccountInput,
+  ): Promise<MutationOutPut> {
+    try {
+      const result = await this.usersService.createAccount(createAccountInput);
+      return result;
+    } catch (e) {
+      return {
+        ok: false,
+        error: e,
+      };
+    }
+  }
+
+  @Mutation(() => LoginOutput)
+  async login(@Args('input') loginInput: LoginInput): Promise<LoginOutput> {
+    try {
+      const result = this.usersService.login(loginInput);
+      return result;
+    } catch (e) {
+      return {
+        ok: false,
+        error: e,
+      };
+    }
+  }
 }

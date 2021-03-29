@@ -2,9 +2,15 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type CreateAccountOutPut {
-  error: String
+type MutationOutPut {
   ok: Boolean!
+  error: String
+}
+
+type LoginOutput {
+  ok: Boolean!
+  error: String
+  token: String
 }
 
 type Query {
@@ -12,11 +18,23 @@ type Query {
 }
 
 type Mutation {
-  createAccount(input: CreateAccountInput!): CreateAccountOutPut!
+  createAccount(input: CreateAccountInput!): MutationOutPut!
+  login(input: LoginInput!): LoginOutput!
 }
 
 input CreateAccountInput {
   email: String!
   password: String!
-  role: String!
+  role: UserRole!
+}
+
+enum UserRole {
+  Client
+  Owner
+  Delivery
+}
+
+input LoginInput {
+  email: String!
+  password: String!
 }
